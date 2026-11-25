@@ -39,6 +39,7 @@ button:focus-visible{outline:3px solid var(--lamp);outline-offset:3px}
 .cell.win{animation:blink .45s steps(2) 8}
 @keyframes blink{50%{background:#fff;color:#000}}
 .cell.gone{background:#4a4857;color:#8c8999;box-shadow:none;animation:none}
+.cell.gone.on{background:var(--lamp);color:var(--lamp-ink);box-shadow:0 0 0 3px #fff,0 0 22px 8px var(--lamp)}
 .c0{--bc:var(--c0)}.c1{--bc:var(--c1)}.c2{--bc:var(--c2)}.c3{--bc:var(--c3)}.c4{--bc:var(--c4)}
 .prize{display:flex;align-items:center;gap:18px;max-width:560px;margin:18px auto 0;background:var(--panel);color:#fff;border-radius:18px;padding:14px}
 .prize[hidden]{display:none}
@@ -130,9 +131,9 @@ function roll(){
   prizeEl.hidden=true;hist.textContent='';pending=0;
   document.querySelectorAll('.win,.sel').forEach(e=>e.classList.remove('win','sel'));
   const target=pool[Math.floor(Math.random()*pool.length)];
-  const others=pool.filter(x=>x!==target),seq=[];let prev=cur;
-  if(others.length){for(let i=0;i<34;i++){let n;do{n=others[Math.floor(Math.random()*others.length)]}while(n===prev&&others.length>1);seq.push(n);prev=n}}
-  if(pool.length>=4){const ti=pool.indexOf(target),L=pool.length;[-2,1,-1].forEach(o=>seq.push(pool[(ti+o+L)%L]))}
+  const seq=[];let prev=cur;
+  for(let i=0;i<34;i++){let n;do{n=1+Math.floor(Math.random()*15)}while(n===prev||n===target);seq.push(n);prev=n}
+  [-2,1,-1].forEach(o=>seq.push(((target-1+o+15)%15)+1));
   seq.push(target);
   let i=0;
   (function step(){
